@@ -8,15 +8,16 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
             data-auto-a11y="true"></script>
+
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                @if (Convert.ToBoolean(ViewData["admin"]))
-                {
-                    <a class="navbar-brand" asp-area="" asp-controller="Orden" asp-action="Index">Pizzeria</a>
-                }
+                
+                <a class="navbar-brand" asp-area="" asp-controller="Orden" asp-action="Index">Ordenes</a>
+                
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +29,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Pizza" asp-action="Index">Pizzas</a>
                         </li>
                     </ul>
+                </div>
+                <div style="margin-left:auto; margin-right: 0;">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                 </div>
             </div>
         </nav>

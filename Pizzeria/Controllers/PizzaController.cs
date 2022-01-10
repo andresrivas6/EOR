@@ -7,31 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Pizzeria.Models;
-
+using Pizzeria.Infraestructure.Interfaces;
 namespace Pizzeria.Controllers
 {
     public class PizzaController : Controller
     {
-        private readonly EorContext _context;
-        //private readonly IPizza _pizza;
-        public PizzaController(EorContext context)
+        //private readonly EorContext _context;
+        private readonly IPizza _pizza;
+        public PizzaController(EorContext context, IPizza pizza)
         {
-            _context = context;
+            //_context = context;
+            _pizza = pizza;
         }
 
-        // GET: Pizza
         public async Task<IActionResult> Index()
         {
-            //Usuario u = new Usuario();
-            //u = _usuario.GetUserByID(id);
-            //HttpContext.Session.GetInt32("admin");
-            //HttpContext.Session.SetInt32("usuario", Convert.ToInt32(u.Id));
             Int32? ad = HttpContext.Session.GetInt32("admin");
             ViewData["admin"] = ad;
-            return View(await _context.Pizza.ToListAsync());
+            List<Pizza> pizzas = await _pizza.GetPizzas();
+
+            return View(pizzas);
+            //return View(await _context.Pizza.ToListAsync());
         }
 
-        // GET: Pizza/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,8 +37,9 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var pizza = await _context.Pizza
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var pizza = await _context.Pizza
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var pizza = await _pizza.GetPizzaById(id.Value);
             if (pizza == null)
             {
                 return NotFound();
@@ -49,29 +48,33 @@ namespace Pizzeria.Controllers
             return View(pizza);
         }
 
-        // GET: Pizza/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Pizza/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NombreProducto,Tamano,CantPorciones,Precio,Descripcion")] Pizza pizza)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(pizza);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    //_context.Add(pizza);
+                    //await _context.SaveChangesAsync();
+
+                    await _pizza.CreatePizza(pizza);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(pizza);
+            }catch(Exception ex)
+            {
+                throw ex;
             }
-            return View(pizza);
         }
 
-        // GET: Pizza/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,7 +82,8 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var pizza = await _context.Pizza.FindAsync(id);
+            //var pizza = await _context.Pizza.FindAsync(id);
+            var pizza = await _pizza.GetPizzaById(id.Value);
             if (pizza == null)
             {
                 return NotFound();
@@ -87,9 +91,6 @@ namespace Pizzeria.Controllers
             return View(pizza);
         }
 
-        // POST: Pizza/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NombreProducto,Tamano,CantPorciones,Precio,Descripcion")] Pizza pizza)
@@ -103,8 +104,9 @@ namespace Pizzeria.Controllers
             {
                 try
                 {
-                    _context.Update(pizza);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(pizza);
+                    //await _context.SaveChangesAsync();
+                    await _pizza.UpdatePizza(pizza);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,7 +124,6 @@ namespace Pizzeria.Controllers
             return View(pizza);
         }
 
-        // GET: Pizza/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,8 +131,9 @@ namespace Pizzeria.Controllers
                 return NotFound();
             }
 
-            var pizza = await _context.Pizza
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var pizza = await _context.Pizza
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var pizza = await _pizza.GetPizzaById(id.Value);
             if (pizza == null)
             {
                 return NotFound();
@@ -140,20 +142,23 @@ namespace Pizzeria.Controllers
             return View(pizza);
         }
 
-        // POST: Pizza/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pizza = await _context.Pizza.FindAsync(id);
-            _context.Pizza.Remove(pizza);
-            await _context.SaveChangesAsync();
+            //var pizza = await _context.Pizza.FindAsync(id);
+            //_context.Pizza.Remove(pizza);
+            //await _context.SaveChangesAsync();
+
+            var pizza = await _pizza.GetPizzaById(id);
+            await _pizza.DeletePizza(pizza);
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool PizzaExists(int id)
         {
-            return _context.Pizza.Any(e => e.Id == id);
+            return _pizza.PizzaExists(id);
         }
     }
 }

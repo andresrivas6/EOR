@@ -1,12 +1,10 @@
 ﻿@model Pizzeria.Models.Orden
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Orden";
 }
 
-<h1>Edit</h1>
-
-<h4>Orden</h4>
+<h1>Editar Orden</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,9 +17,25 @@
                 <span asp-validation-for="NombreSolicitante" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="TipoPizza" class="control-label"></label>
+                <select asp-for="TipoPizza"
+                        asp-items="ViewBag.Pizzas">
+                </select>
+                <span asp-validation-for="NombreSolicitante" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CantOrden" class="control-label"></label>
                 <input asp-for="CantOrden" class="form-control" />
                 <span asp-validation-for="CantOrden" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Precio</label>
+                <input id="Precio" name="Precio" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" readonly />
+                <span asp-validation-for="Total" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Direccion" class="control-label"></label>
@@ -38,24 +52,48 @@
                     <input class="form-check-input" asp-for="Entregada" /> @Html.DisplayNameFor(model => model.Entregada)
                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" />
+                <input asp-for="Fecha" class="form-control" readonly/>
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Editar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Regresar</a>
 </div>
+<script type="text/javascript">
+    $(window).on("load", function () {
+        buscarPrecio();
+    });
 
+    document.getElementById("CantOrden").addEventListener("focusout", function () {
+        calcularTotal();
+    });
+    document.getElementById("TipoPizza").onchange = function () {
+        buscarPrecio();
+    };
+
+    function buscarPrecio() {
+        var pizza = document.getElementById("TipoPizza").value;
+        var url = "/Orden/Precio";
+        $.get(url, { idPizza: pizza }, function (data) {
+            document.getElementById("Precio").value = data;
+            calcularTotal();
+        });
+
+    }
+
+    function calcularTotal() {
+
+        var cant = document.getElementById("CantOrden").value;
+        var precio = document.getElementById("Precio").value;
+        document.getElementById("Total").value = cant * precio;
+    }
+</script>

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Pizzeria.Infraestructure.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Collections;
 
 namespace Pizzeria.Controllers
 {
@@ -22,6 +23,7 @@ namespace Pizzeria.Controllers
             _usuario = usuario;
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Index()
         {
             return PartialView();
@@ -49,6 +51,13 @@ namespace Pizzeria.Controllers
             }
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Logout()
+        {
+            
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
+        }
         
         public IActionResult Privacy()
         {
