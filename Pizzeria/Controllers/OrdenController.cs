@@ -40,12 +40,12 @@ namespace Pizzeria.Controllers
             if (Convert.ToBoolean(HttpContext.Session.GetInt32("admin")))
             {
                 lstOrden = await _orden.GetOrdenes();
-                lstOrden = lstOrden.Where(o => o.Entregada == false);
+                lstOrden = lstOrden.Where(o => o.Entregada == false).OrderBy(o => o.Fecha);
             }
             else
             {
                 lstOrden = await _orden.GetOrdenes();
-                lstOrden = lstOrden.Where(o => o.UsuarioIngreso == id && o.Entregada == false);
+                lstOrden = lstOrden.Where(o => o.UsuarioIngreso == id && o.Entregada == false).OrderBy(o => o.Fecha);
             }
 
             return View(lstOrden);
