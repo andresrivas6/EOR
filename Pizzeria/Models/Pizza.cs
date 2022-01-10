@@ -3,30 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-
 namespace Pizzeria.Models
 {
-    public class Usuario
+    public class Pizza
     {
         [Key]
         [Required]
         public int Id { get; set; }
 
         [Required]
-        [StringLength(200)]
+        [StringLength(100)]
         [DataType(DataType.Text)]
-        public string Nombre { get; set; }
+        public string NombreProducto { get; set; }
 
         [Required]
         [StringLength(100)]
         [DataType(DataType.Text)]
-        public string User { get; set; }
+        public string Tamano { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
-        public Byte[] Pass { get; set; }
-
-        public Boolean EsAdmin { get; set; }
+        public int CantPorciones { get; set; }
+        public Decimal Precio { get; set; }
+        public string Descripcion { get; set; }
 
         public ICollection<Orden> Ordenes { get; set; }
     }

@@ -20,11 +20,6 @@ namespace Pizzeria.Infraestructure.Services
             {
                 using (var _context = new EorContext())
                 {
-                    Usuario usu = new Usuario();
-
-                    //usu = _context.Usuario.FromSql(@"EXECUTE dbo.GetProductByCategory {0},{1}
-                    //", new Array[usuario, clave]);
-
                     var connection = (SqlConnection)_context.Database.GetDbConnection();
 
                     DbCommand cmd = _context.Database.GetDbConnection().CreateCommand();
@@ -34,7 +29,7 @@ namespace Pizzeria.Infraestructure.Services
 
                     cmd.Parameters.Add(new SqlParameter("@pUsuario", SqlDbType.VarChar) { Value = usuario });
                     cmd.Parameters.Add(new SqlParameter("@pContra", SqlDbType.VarChar) { Value = clave });
-                    SqlParameter valido = new SqlParameter("@pValido", SqlDbType.Bit);
+                    SqlParameter valido = new SqlParameter("@pValido", SqlDbType.Int);
                     valido.Direction = ParameterDirection.Output;
                     SqlParameter errUsuario = new SqlParameter("@pErrorUsuario", SqlDbType.Bit);
                     errUsuario.Direction = ParameterDirection.Output;
@@ -55,6 +50,26 @@ namespace Pizzeria.Infraestructure.Services
             {
                 return 0;
             }
+        }
+
+        public Usuario GetUserByID(int id)
+        {
+            try
+            {
+                var usuario = new Usuario();
+
+                using (var context = new EorContext())
+                {
+                    usuario = context.Usuario.Find(id);
+                }
+
+                return usuario;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }

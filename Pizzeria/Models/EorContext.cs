@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Pizzeria.Models;
 
 namespace Pizzeria.Models
 {
@@ -27,16 +28,23 @@ namespace Pizzeria.Models
         {
             modelBuilder.Entity<Usuario>(entity =>
             {
-                //entity.HasOne(u => u.Rol)
-                //      .WithMany(r => r.Usuarios);
+                entity.HasMany(u => u.Ordenes)
+                      .WithOne(o => o.Usuario);
+            });
 
-                //entity.HasOne(a => a.UnidadApoyo)
-                //      .WithMany(b => b.Usuarios);
+            modelBuilder.Entity<Pizza>(entity =>
+            {
+                entity.HasMany(p => p.Ordenes)
+                      .WithOne(o => o.Pizza);
             });
 
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Pizzeria.Models.Pizza> Pizza { get; set; }
+
+        public DbSet<Pizzeria.Models.Orden> Orden { get; set; }
     }
 }

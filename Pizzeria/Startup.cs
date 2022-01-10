@@ -29,7 +29,9 @@ namespace Pizzeria
         {
             services.AddDbContext<EorContext>(options => options.UseSqlServer(Configuration.GetConnectionString("eorDatabase")));
             services.AddControllersWithViews();
-
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);   
+            });
             services.AddScoped<IUsuario, ServiceUsuario>();
         }
 
@@ -52,7 +54,7 @@ namespace Pizzeria
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

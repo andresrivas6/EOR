@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Pizzeria.Infraestructure.Interfaces;
+using Microsoft.AspNetCore.Http;
+
 namespace Pizzeria.Controllers
 {
     public class HomeController : Controller
@@ -22,14 +24,23 @@ namespace Pizzeria.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return PartialView();
         }
-
-        public IActionResult Login(Usuario us)
+        [HttpPost]
+        public IActionResult Login()
         {
-            int valido = _usuario.LoginUser(us.User, us.Pass);
+            int valido = _usuario.LoginUser(Request.Form["Usuario"].ToString(), Request.Form["Password"].ToString());
+            
             if (valido != 0)
-                return RedirectToAction("Welcome");
+            {
+                Usuario u = new Usuario();
+                u = _usuario.GetUserByID(valido);
+
+                HttpContext.Session.SetInt32("admin", Convert.ToInt32(u.EsAdmin));
+                HttpContext.Session.SetInt32("usuario", Convert.ToInt32(u.Id));
+
+                return RedirectToAction("Index", "Orden");
+            }
             else
             {
                 //Usuario usuario = new Usuario();
@@ -38,18 +49,7 @@ namespace Pizzeria.Controllers
             }
         }
 
-        public IActionResult Welcome(Usuario us)
-        {
-            int valido = _usuario.LoginUser(us.User, us.Pass);
-            if (valido != 0)
-                return RedirectToAction("Welcome");
-            else
-            {
-                //Usuario usuario = new Usuario();
-                ViewBag.errMsj = "Las credenciales ingresadas son invalidas";
-                return RedirectToAction("Index");
-            }
-        }
+        
         public IActionResult Privacy()
         {
             return View();

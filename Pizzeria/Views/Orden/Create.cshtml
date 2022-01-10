@@ -1,0 +1,65 @@
+﻿@model Pizzeria.Models.Orden
+
+@{
+    ViewData["Title"] = "Crear Orden";
+}
+
+<h1>Ingreso de Orden</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NombreSolicitante" class="control-label"></label>
+                <input asp-for="NombreSolicitante" class="form-control" />
+                <span asp-validation-for="NombreSolicitante" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoPizza" class="control-label"></label>
+                <select asp-for="TipoPizza"
+                        asp-items="ViewBag.Pizzas">
+                </select>
+                <span asp-validation-for="NombreSolicitante" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CantOrden" class="control-label"></label>
+                <input asp-for="CantOrden" class="form-control" />
+                <span asp-validation-for="CantOrden" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direccion" class="control-label"></label>
+                <input asp-for="Direccion" class="form-control" />
+                <span asp-validation-for="Direccion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comentarios" class="control-label"></label>
+                <input asp-for="Comentarios" class="form-control" />
+                <span asp-validation-for="Comentarios" class="text-danger"></span>
+            </div>
+            @*<div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Entregada" /> @Html.DisplayNameFor(model => model.Entregada)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

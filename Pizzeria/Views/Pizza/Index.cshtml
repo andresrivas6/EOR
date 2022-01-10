@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Pizzeria.Models.Pizza>
+
+@{
+    ViewData["Title"] = "Catálogo de Pizza";
+}
+
+@if (Convert.ToBoolean(ViewData["admin"]))
+{
+    <p>
+        <a asp-action="Create">Agregar Nueva Pizza</a>
+    </p>
+}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NombreProducto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tamano)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CantPorciones)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombreProducto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tamano)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CantPorciones)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @if (Convert.ToBoolean(ViewData["admin"]))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="far fa-eye"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="far fa-trash-alt"></i></a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
