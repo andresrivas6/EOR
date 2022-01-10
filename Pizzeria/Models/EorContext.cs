@@ -21,7 +21,7 @@ namespace Pizzeria.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=LAPTOP-1H96F1JR; initial catalog=eor;integrated security=true;");
+            optionsBuilder.UseSqlServer(@"Server=localhost; initial catalog=eor;integrated security=true;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
